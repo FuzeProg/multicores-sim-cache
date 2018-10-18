@@ -21,13 +21,16 @@ void initialise(int nbe, int assoc, Cache cache) {
 }*/
 
 int main(int argc, char* argv[]){
-int cs, bs, assoc;
-char* tmp, trace;
+
+long cs, bs, assoc;
+char* tmp;
+char* trace;
 
 cs = strtol(argv[1], &tmp, 10);
 bs = strtol(argv[2], &tmp, 10);
 assoc = strtol(argv[3], &tmp, 10);
-strcpy(&trace, argv[4]);
+trace = argv[4];
 
-printf("%d, %d, %d, %s", cs, bs, assoc, &trace);
+printf("%li, %li, %li, %s", cs, bs, assoc, trace);
+
 }
