@@ -5,7 +5,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
+#include <math.h>
+
+long bs = 0;
+long cs = 0;
+long assoc = 0;
+char *file;
 
 typedef struct s {
     int valid;
@@ -21,43 +26,42 @@ void initialise(int nbe, int assoc, Cache cache) {
             cache[i][j].valid=0;
 }*/
 
-void isCorrect(int argcs, char *argvs[]) {
-    if (argcs < 5 || argcs > 5) {
-
-        printf("Arguments manquants : \n"
-               "1 : programme 154.c. \n"
-               "2 : taille du cache. Vous avez saisi : %s\n"
-               "3 : taille du bloc. Vous avez saisi : %s\n"
-               "4 : degrés d'associativité. Vous avez saisi : %s\n"
-               "5 : fichier à parcourir. Vous avez saisi : %s\n",
-               argvs[1], argvs[2], argvs[3], argvs[4]);
-        exit(1);
-    }
-}
-
-void test(char *argvs[], int c){
-    if(isnumber((int)strtol(argvs[c], NULL, 10)))
-        puts("C'est un chiffre");
-    else
-        puts("C'est un texte");
+void help() {
+    puts("Usage : ./154.c -b -l -a FILE\n");
+    printf("  -b cache size : Size of the cache\n");
+    printf("  -l bloc size : Blocsize of the cache\n");
+    printf("  -a assoc : Associativity of the cache\n");
+    printf("  FILE : File that contains traces\n");
+    exit(0);
 }
 
 int main(int argc, char *argv[]) {
-
-    long cs, bs, assoc;
-    char *tmp, *trace;
-
-    isCorrect(argc, argv);
-    test(argv, 1);
-    test(argv, 4);
-    printf("%li", strtol(argv[4], &tmp, 10));
-    exit(1);
-
-    cs = strtol(argv[1], &tmp, 10);
-    bs = strtol(argv[2], &tmp, 10);
-    assoc = strtol(argv[3], &tmp, 10);
-    trace = argv[4];
-
-    printf("%li, %li, %li, %s", cs, bs, assoc, trace);
-
+    long i = 1, cs, bs, assoc;
+    char *tmp;
+    while (i < argc) {
+        if (strcmp("-b", argv[i]) == 0) {
+            i++;
+            if (i >= argc)
+                help();
+            cs = strtol(argv[i], &tmp, 10);
+            i++;
+        } else if (strcmp("-l", argv[i]) == 0) {
+            i++;
+            if (i >= argc)
+                help();
+            bs = strtol(argv[i], &tmp, 10);
+            i++;
+        } else if (strcmp ("-a", argv [i]) == 0) {
+            i++;
+            if (i >= argc)
+                help();
+            assoc = strtol(argv[i], &tmp, 10);
+            i++;
+            file = argv[i];
+            i++;
+        } else {
+            help();
+        }
+    }
+    printf("%li %li %li %s", cs, bs, assoc, file);
 }
