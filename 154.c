@@ -17,19 +17,11 @@ typedef struct s {
     double tag;
 } bloc;
 
-/*typedef bloc Cache [][];
-
-void initialise(int nbe, int assoc, Cache cache) {
-    int i, j;
-    for (i=0; i<nbe; i++)
-        for (j=0; j<assoc; j++)
-            cache[i][j].valid=0;
-}*/
-
+// Print out help for command
 void help() {
     puts("Usage : ./154.c -b -l -a FILE\n");
-    printf("  -b cache size : Size of the cache\n");
-    printf("  -l bloc size : Blocsize of the cache\n");
+    printf("  -b cache_size : Size of the cache\n");
+    printf("  -l bloc_size : Blocsize of the cache\n");
     printf("  -a assoc : Associativity of the cache\n");
     printf("  FILE : File that contains traces\n");
     exit(0);
@@ -126,42 +118,51 @@ void hexaConverter(char in[], char out[]) {
     out[size*4] = '\0';
 }
 
-
-int main(int argc, char *argv[]) {
-    long i = 1, cs, bs, assoc;
+// Command line arguments parser, assign the values
+void commandParser(int argcs, char **argvs){
+    int i = 1;
     char *tmp;
 
-    // Command line arguments parser, assign the values
-    while (i < argc) {
-        if (strcmp("-b", argv[i]) == 0) {
+    while (i < argcs) {
+        if (strcmp("-b", argvs[i]) == 0) {
             i++;
-            if (i >= argc)
+            if (i >= argcs)
                 help();
-            cs = strtol(argv[i], &tmp, 10);
+            cs = strtol(argvs[i], &tmp, 10);
             i++;
-        } else if (strcmp("-l", argv[i]) == 0) {
+        } else if (strcmp("-l", argvs[i]) == 0) {
             i++;
-            if (i >= argc)
+            if (i >= argcs)
                 help();
-            bs = strtol(argv[i], &tmp, 10);
+            bs = strtol(argvs[i], &tmp, 10);
             i++;
-        } else if (strcmp("-a", argv[i]) == 0) {
+        } else if (strcmp("-a", argvs[i]) == 0) {
             i++;
-            if (i >= argc)
+            if (i >= argcs)
                 help();
-            assoc = strtol(argv[i], &tmp, 10);
+            assoc = strtol(argvs[i], &tmp, 10);
             i++;
-            file = argv[i];
+            file = argvs[i];
             i++;
         } else {
             help();
         }
     }
+}
 
-    // Cache configuration
+// Print out cache configuration
+void cacheConfig(){
     puts("Cache configuration :");
     printf("Cache size\t\t\t\t%li.\n", cs);
     printf("Cache bloc size\t\t\t%li.\n", bs);
     printf("Cache associativity\t\t%li.\n", assoc);
     puts("");
+}
+
+int main(int argc, char **argv) {
+    char *tmp;
+
+    commandParser(argc, argv);
+    cacheConfig();
+
 }
