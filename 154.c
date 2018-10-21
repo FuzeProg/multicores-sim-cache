@@ -7,15 +7,26 @@
 #include <string.h>
 #include <math.h>
 
-long bs = 0;
-long cs = 0;
-long assoc = 0;
-char *file;
+#define _CONST1 32
 
-typedef struct s {
+long bs = 0, cs = 0, assoc = 0,
+    blockOffsetBits = 0, set = 0, indexBits = 0, tagBits = 0;
+char *trace;
+
+typedef struct cache {
     int valid;
-    double tag;
-} bloc;
+    double tag[32];
+} cache;
+
+// Cache initializer -> cache = null
+void initialize(long nbe, long assoc, cache *cache){
+    int i, j;
+    for (i = 0; i < nbe; i++)
+        for (j = 0; j < assoc; j++){
+            cache[i].valid = 0;
+            cache[i].tag[j] = -1;
+        }
+}
 
 // Print out help for command
 void help() {
@@ -142,7 +153,7 @@ void commandParser(int argcs, char **argvs){
                 help();
             assoc = strtol(argvs[i], &tmp, 10);
             i++;
-            file = argvs[i];
+            trace = argvs[i];
             i++;
         } else {
             help();
@@ -159,10 +170,28 @@ void cacheConfig(){
     puts("");
 }
 
+// Convert into bits the tag, index, blockoffset
+void bitConverter(){
+    blockOffsetBits = (long)(log(bs)/log(2));
+    set = (cs*1024)/(bs*assoc);
+    indexBits = (long)(log(set)/log(2));
+    tagBits = 32 - indexBits - blockOffsetBits;
+}
+
 int main(int argc, char **argv) {
-    char *tmp;
 
     commandParser(argc, argv);
     cacheConfig();
+    bitConverter();
+
+    char in[_CONST1];
+    char out[_CONST1];
+    char tagBin[_CONST1];
+    char index[_CONST1];
+    char blocOffset[_CONST1];
+
+    cache cache[set];
+
+    initialize(set, assoc, cache);
 
 }
