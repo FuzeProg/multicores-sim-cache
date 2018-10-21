@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
     long i = 1, cs, bs, assoc;
     char *tmp;
 
-    // Console parser, assign the values
+    // Command line arguments parser, assign the values
     while (i < argc) {
         if (strcmp("-b", argv[i]) == 0) {
             i++;
@@ -157,5 +157,11 @@ int main(int argc, char *argv[]) {
             help();
         }
     }
-    printf("%li %li %li %s", cs, bs, assoc, file);
+
+    // Cache configuration
+    puts("Cache configuration :");
+    printf("Cache size\t\t\t\t%li.\n", cs);
+    printf("Cache bloc size\t\t\t%li.\n", bs);
+    printf("Cache associativity\t\t%li.\n", assoc);
+    puts("");
 }
