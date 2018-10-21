@@ -35,9 +35,103 @@ void help() {
     exit(0);
 }
 
+// Hexadecimal converter to binary
+void hexaConverter(char in[], char out[]) {
+    int i, j;
+    size_t size = strlen(in);
+
+    for (i = 0; i < size; i++) {
+        if (in[i] == 0) {
+            out[i*4] = '0';
+            out[i*4+1] = '0';
+            out[i*4+2] = '0';
+            out[i*4+3] = '0';
+        } else if (in[i] == '1') {
+            out[i*4] = '0';
+            out[i*4+1] = '0';
+            out[i*4+2] = '0';
+            out[i*4+3] = '1';
+        } else if (in[i] == '2') {
+            out[i*4] = '0';
+            out[i*4+1] = '0';
+            out[i*4+2] = '1';
+            out[i*4+3] = '0';
+        } else if (in[i] == '3') {
+            out[i*4] = '0';
+            out[i*4+1] = '0';
+            out[i*4+2] = '1';
+            out[i*4+3] = '1';
+        } else if (in[i] == '4') {
+            out[i*4] = '0';
+            out[i*4+1] = '1';
+            out[i*4+2] = '0';
+            out[i*4+3] = '0';
+        } else if (in[i] == '5') {
+            out[i*4] = '0';
+            out[i*4+1] = '1';
+            out[i*4+2] = '0';
+            out[i*4+3] = '1';
+        } else if (in[i] == '6') {
+            out[i*4] = '0';
+            out[i*4+1] = '1';
+            out[i*4+2] = '1';
+            out[i*4+3] = '0';
+        } else if (in[i] == '7') {
+            out[i*4] = '0';
+            out[i*4+1] = '1';
+            out[i*4+2] = '1';
+            out[i*4+3] = '1';
+        } else if (in[i] == '8') {
+            out[i*4] = '1';
+            out[i*4+1] = '0';
+            out[i*4+2] = '0';
+            out[i*4+3] = '0';
+        } else if (in[i] == '9') {
+            out[i*4] = '1';
+            out[i*4+1] = '0';
+            out[i*4+2] = '0';
+            out[i*4+3] = '1';
+        } else if (in[i] == 'a') {
+            out[i*4] = '1';
+            out[i*4+1] = '0';
+            out[i*4+2] = '1';
+            out[i*4+3] = '0';
+        } else if (in[i] == 'b') {
+            out[i*4] = '1';
+            out[i*4+1] = '0';
+            out[i*4+2] = '1';
+            out[i*4+3] = '1';
+        } else if (in[i] == 'c') {
+            out[i*4] = '1';
+            out[i*4+1] = '1';
+            out[i*4+2] = '0';
+            out[i*4+3] = '0';
+        } else if (in[i] == 'd') {
+            out[i*4] = '1';
+            out[i*4+1] = '1';
+            out[i*4+2] = '0';
+            out[i*4+3] = '1';
+        } else if (in[i] == 'e') {
+            out[i*4] = '1';
+            out[i*4+1] = '1';
+            out[i*4+2] = '1';
+            out[i*4+3] = '0';
+        } else if (in[i] == 'f') {
+            out[i*4] = '1';
+            out[i*4+1] = '1';
+            out[i*4+2] = '1';
+            out[i*4+3] = '1';
+        }
+    }
+    out[size*4] = '\0';
+}
+
+
 int main(int argc, char *argv[]) {
     long i = 1, cs, bs, assoc;
     char *tmp;
+
+    // Console parser, assign the values
     while (i < argc) {
         if (strcmp("-b", argv[i]) == 0) {
             i++;
@@ -51,7 +145,7 @@ int main(int argc, char *argv[]) {
                 help();
             bs = strtol(argv[i], &tmp, 10);
             i++;
-        } else if (strcmp ("-a", argv [i]) == 0) {
+        } else if (strcmp("-a", argv[i]) == 0) {
             i++;
             if (i >= argc)
                 help();
