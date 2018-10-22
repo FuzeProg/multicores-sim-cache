@@ -13,19 +13,19 @@ long bs = 0, cs = 0, assoc = 0,
     blockOffsetBits = 0, set = 0, indexBits = 0, tagBits = 0;
 char *trace;
 
-typedef struct cache {
+typedef struct Cache {
     int valid;
     double tag[32];
-} cache;
+} Cache;
 
 // Cache initializer -> cache = null
-void initialize(long nbe, long assoc, cache *cache){
+void initialize(long nbe, long assoc, Cache cache[]){
     int i, j;
-    for (i = 0; i < nbe; i++)
-        for (j = 0; j < assoc; j++){
-            cache[i].valid = 0;
+    for (i = 0; i < nbe; i++){
+        for (j = 0; j < assoc; j++)
             cache[i].tag[j] = -1;
-        }
+        cache[i].valid = 0;
+    }
 }
 
 // Print out help for command
@@ -164,10 +164,14 @@ void commandParser(int argcs, char **argvs){
 // Print out cache configuration
 void cacheConfig(){
     puts("Cache configuration :");
-    printf("Cache size\t\t\t\t%li.\n", cs);
-    printf("Cache bloc size\t\t\t%li.\n", bs);
-    printf("Cache associativity\t\t%li.\n", assoc);
-    puts("");
+    puts(" _______________________________________ ");
+    puts("|\tVariable\t\t\t|\tValue\t\t|");
+    puts("|-----------------------|---------------|");
+    printf("|\tCache size\t\t\t|\t%li\t\t\t|\n", cs);
+    printf("|\tCache bloc size\t\t|\t%li\t\t|\n", bs);
+    printf("|\tCache associativity\t|\t%li\t\t\t|\n", assoc);
+    printf("|\tTrace\t\t\t\t|\t%s\t|\n", trace);
+    puts("|_______________________|_______________|");
 }
 
 // Convert into bits the tag, index, blockoffset
@@ -190,8 +194,9 @@ int main(int argc, char **argv) {
     char index[_CONST1];
     char blocOffset[_CONST1];
 
-    cache cache[set];
+    Cache cache[set];
 
     initialize(set, assoc, cache);
 
+    
 }
