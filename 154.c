@@ -4,6 +4,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct bloc{
     int valid;
@@ -30,7 +31,6 @@ void cacheConfig(int cs, int bs, int assoc, int nbe, char *trace){
     puts("");
 }
 
-
 int main(int argc, char *argv[]) {
 
     char *tmp;
@@ -54,8 +54,14 @@ int main(int argc, char *argv[]) {
         while(!feof(f)){
             fscanf(f, "%c%s\n", &car, adr);
             printf("Ligne %d : %c est un caractère.\n%s est une adresse.\n\n", i, car, adr);
+            if (car == 'R')
+                nbr_r++;
+            else if (car == 'W')
+                nbr_w++;
             i++;
         }
     fclose(f);
     }
+
+    printf("%d écritures.\n%d lectures.\n", nbr_w, nbr_r);
 }
