@@ -6,11 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-<<<<<<< Updated upstream
-typedef struct bloc {
-=======
+
 typedef struct block {
->>>>>>> Stashed changes
     int valid;
     double tag;
 } bloc;
@@ -66,58 +63,18 @@ int main(int argc, char *argv[]) {
     cacheConfig(cs, bs, assoc, nbe, trace);
 
     char car, *adr, i = 0;
-<<<<<<< Updated upstream
-    int hexadr, numbloc, index, tag, a, trouve, hits, misses;
-=======
-    int hexadr, numbloc, index, tag, a, hits = 0, misses = 0;
->>>>>>> Stashed changes
+
+    int hexadr, numbloc, index, tag, a, hits = 0, misses = 0, trouve;
 
     FILE *f = fopen("test.txt", "r");
     if (f != NULL) {
         while (!feof(f)) {
             fscanf(f, "%c%s\n", &car, adr);
-<<<<<<< Updated upstream
-            /**printf("Ligne %d : %c est un caractère.\n"
-                   "%s est une adresse.\n\n",
-                   i, car, adr);*/
-            RW_counter(car);
-
-            hexadr = stringToHexa(adr);
-
-            numbloc = hexadr / bs;
-
-            index = numbloc % nbe;
-
-            tag = numbloc / nbe;
-
-            a = 0;
-            trouve = 0;
-
-            while ((a < assoc) && (trouve == 0)) {
-                if ((cache[index][a].valid == 0) || (cache[index][a].tag != tag)) {
-                    a++;
-                } else {
-                    trouve = 1;
-                    hits++;
-                }
-
-                if (trouve == 0){
-                    misses++;
-                    cache[index][0].valid = 1;
-                    cache[index][0].tag = tag;
-                }
-                i++;
-            }
-=======
             printf("Ligne %d : %c est un caractère.\n"
                    "%s est une adresse.\n\n",
                    i, car, adr);
             i++;
             //RW_counter(car);
-
-
-
->>>>>>> Stashed changes
             fclose(f);
         }
 
