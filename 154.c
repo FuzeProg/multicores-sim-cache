@@ -50,11 +50,12 @@ int stringToHexa(char *adr) {
 int main(int argc, char *argv[]) {
 
     char *tmp;
+    int nbr_r = 0, nbr_w = 0;
 
-    int cs = (int) strtol(argv[1], &tmp, 10);
-    int bs = (int) strtol(argv[2], &tmp, 10);
+    int cs = (int)strtol(argv[1], &tmp, 10);
+    int bs = (int)strtol(argv[2], &tmp, 10);
     int assoc = (int) strtol(argv[3], &tmp, 10);
-    int nbe = cs / (bs * assoc);
+    int nbe = cs/(bs*assoc);
     char *trace = argv[4];
 
     bloc cache[nbe][assoc];
@@ -64,21 +65,13 @@ int main(int argc, char *argv[]) {
 
     char car, *adr, i = 0;
 
-    int hexadr, numbloc, index, tag, a, hits = 0, misses = 0, trouve;
-
     FILE *f = fopen("test.txt", "r");
-    if (f != NULL) {
-        while (!feof(f)) {
+    if(f != NULL){
+        while(!feof(f)){
             fscanf(f, "%c%s\n", &car, adr);
-            printf("Ligne %d : %c est un caractère.\n"
-                   "%s est une adresse.\n\n",
-                   i, car, adr);
+            printf("Ligne %d : %c est un caractère.\n%s est une adresse.\n\n", i, car, adr);
             i++;
-            //RW_counter(car);
-            fclose(f);
         }
-
-        printf("%d écritures.\n%d lectures.\n", nbr_w, nbr_r);
-        printf("%d hits.\n%d misses.\n", hits, misses);
+        fclose(f);
     }
 }
