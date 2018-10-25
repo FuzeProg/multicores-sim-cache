@@ -47,10 +47,16 @@ int stringToHexa(char *adr) {
     return (int) strtol(adr, NULL, 16);
 }
 
+void isReadWrite(char car){
+    if (car == 'R')
+        nbr_r++;
+    else if (car == 'W')
+        nbr_w++;
+}
+
 int main(int argc, char *argv[]) {
 
     char *tmp;
-    int nbr_r = 0, nbr_w = 0;
 
     int cs = (int)strtol(argv[1], &tmp, 10);
     int bs = (int)strtol(argv[2], &tmp, 10);
@@ -70,8 +76,11 @@ int main(int argc, char *argv[]) {
         while(!feof(f)){
             fscanf(f, "%c%s\n", &car, adr);
             printf("Ligne %d : %c est un caractère.\n%s est une adresse.\n\n", i, car, adr);
+            isReadWrite(car);
             i++;
         }
         fclose(f);
     }
+    printf("%d écritures.\n"
+           "%d lectures.\n", nbr_w, nbr_r);
 }
