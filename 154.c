@@ -28,15 +28,15 @@ char *trace = NULL;
 // Print out cache content
 void printCache(Set *cache) {
     int i;
+    puts("START");
     for (i = 0; i < sets; i++) {
         struct Block *tmp = cache[i].head;
         while (tmp != NULL) {
-            printf("%llu : ", tmp->tag);
+            printf("%llu -> ", tmp->tag);
             tmp = tmp->next;
         }
-        puts("");
+        puts("\nEND");
     }
-    printf("\t\t| END\n");
 }
 
 void addToEnd(Set *cache, int setIndex, unsigned long long int tag) {
@@ -202,7 +202,7 @@ int main(int argc, char **argv) {
 
     Set cache[sets];
 
-    printf("Cache : %d, | Block : %d | Set : %d.\n", cs, bs, sets);
+    printf("Cache : %d | Block : %d | Set : %d.\n", cs, bs, sets);
 
     char car, adr[10];
 
@@ -220,7 +220,7 @@ int main(int argc, char **argv) {
 
         val = strtoull(adr, NULL, 16);
 
-        printf("%c est caractère, %s est adresse\n", car, adr);
+        //printf("%c est caractère, %s est adresse\n", car, adr);
 
         unsigned long long int tagBitsValue = (val >> (bs + bitNum));
 
@@ -236,6 +236,8 @@ int main(int argc, char **argv) {
 
         }
     }
+
+    printCache(cache);
 
 
     printf("Mémoire lues : %d.\n"
