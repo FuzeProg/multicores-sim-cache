@@ -119,16 +119,8 @@ void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int rewrite) 
 
             tmp->nruB = 0;
 
-            if (rewrite == 0) {
+            hits++;
 
-                hits ++;
-
-            } else {
-
-                hits++;
-                nbr_w++;
-
-            }
 
             found = 1;
             break;
@@ -142,19 +134,8 @@ void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int rewrite) 
 
     if (found == 0) {
 
-        if (rewrite == 0) {
 
-            misses++;
-            nbr_r++;
-
-        } else {
-
-            misses++;
-            nbr_r++;
-            nbr_w++;
-
-        }
-
+        misses++;
         if (cache[setIndex].content < blockSet) {
 
             addToEnd(cache, setIndex, tagBVal);
@@ -186,7 +167,7 @@ int main(int argc, char **argv) {
     double csCheck = log((double) cs) / log(2);
     double bsCheck = log((double) bs) / log(2);
 
-    if ((csCheck != (int) csCheck) || (bsCheck != (int) bsCheck)){
+    if ((csCheck != (int) csCheck) || (bsCheck != (int) bsCheck)) {
         perror("Erreur\n");
         exit(0);
     } else {
@@ -226,12 +207,14 @@ int main(int argc, char **argv) {
 
         int indexBinNum = (int) ((val >> bs) & ((int) (pow(2, bitNum) - 1)));
 
-        if (car == 'R'){
+        if (car == 'R') {
 
+            nbr_r++;
             nru(cache, tagBitsValue, indexBinNum, 0);
 
-        } else if (car == 'W'){
+        } else if (car == 'W') {
 
+            nbr_w++;
             nru(cache, tagBitsValue, indexBinNum, 1);
 
         }
@@ -239,9 +222,8 @@ int main(int argc, char **argv) {
 
     printCache(cache);
 
-
-    printf("Mémoire lues : %d.\n"
-           "Mémoire écrites : %d.\n"
+    printf("Memoire lues : %d.\n"
+           "Memoire ecrites : %d.\n"
            "Hits : %d.\n"
            "Misses : %d.\n",
            nbr_r, nbr_w, hits, misses);
