@@ -116,23 +116,34 @@ void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int rewrite) 
 
     while (tmp != NULL) {
         if (tmp->tag == tagBVal) {
+
             tmp->nruB = 0;
+
             hits++;
-            // puts("Hit");
+
+
             found = 1;
             break;
+
         } else {
+
             tmp = tmp->next;
+
         }
     }
 
     if (found == 0) {
+
+
         misses++;
-        // puts("Miss");
         if (cache[setIndex].content < blockSet) {
+
             addToEnd(cache, setIndex, tagBVal);
+
         } else {
+
             newNRU(cache, tagBVal, setIndex);
+
         }
     }
 }
@@ -161,7 +172,7 @@ int main(int argc, char **argv) {
 
     Set cache[sets];
 
-    // printf("Cache : %d | Block : %d | Set : %d.\n", cs, bs, sets);
+    printf("Cache : %d | Block : %d | Set : %d.\n", cs, bs, sets);
 
     char car, adr[10];
 
@@ -198,7 +209,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    // printCache(cache);
+    printCache(cache);
 
     printf("Memoire lues : %d.\n"
            "Memoire ecrites : %d.\n"
