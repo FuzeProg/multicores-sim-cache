@@ -21,7 +21,7 @@ typedef struct Set {
 
 int sets = 0, bs = 0, cs = 0, blockSet = 1, assoc = 0;
 
-int nbr_r = 0, nbr_w = 0, hits_r = 0, hits_w = 0, misses_r = 0, misses_w = 0, hits = 0, misses = 0;
+int nbr_r = 0, nbr_w = 0, hits = 0, misses = 0;
 
 char *trace = NULL;
 
@@ -108,7 +108,7 @@ void newNRU(Set *cache, unsigned long long int tagBVal, int setIndex) {
     }
 }
 
-void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int wr) {
+void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int rewrite) {
 
     struct Block *tmp = cache[setIndex].head;
 
@@ -118,10 +118,6 @@ void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int wr) {
         if (tmp->tag == tagBVal) {
             tmp->nruB = 0;
             hits++;
-            if(wr == 0)
-                hits_r++;
-            else if(wr == 1)
-                hits_w++;
             // puts("Hit");
             found = 1;
             break;
@@ -132,10 +128,6 @@ void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int wr) {
 
     if (found == 0) {
         misses++;
-        if(wr == 0)
-            misses_r++;
-        else if(wr == 1)
-            misses_w++;
         // puts("Miss");
         if (cache[setIndex].content < blockSet) {
             addToEnd(cache, setIndex, tagBVal);
@@ -208,15 +200,11 @@ int main(int argc, char **argv) {
 
     // printCache(cache);
 
-    printf("Nombre de lectures : %d.\n"
-           "Nombre d'écritures : %d.\n\n"
-           "Cohérences lues : %d.\n"
-           "Cohérences écrites : %d.\n\n"
-           "Défauts lus : %d.\n"
-           "Défauts écrits : %d.\n\n"
-           "Total de cohérences : %d.\n"
-           "Total de défauts : %d.\n",
-           nbr_r, nbr_w, hits_r, hits_w, misses_r, misses_w, hits, misses);
+    printf("Memoire lues : %d.\n"
+           "Memoire ecrites : %d.\n"
+           "Hits : %d.\n"
+           "Misses : %d.\n",
+           nbr_r, nbr_w, hits, misses);
 
     return 0;
 }
