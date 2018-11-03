@@ -10,7 +10,7 @@
 
 typedef struct Block {
     short nruB;
-    unsigned long long int tag;
+    long int tag;
     struct Block *next;
 } Block;
 
@@ -32,14 +32,14 @@ void printCache(Set *cache) {
     for (i = 0; i < sets; i++) {
         struct Block *tmp = cache[i].head;
         while (tmp != NULL) {
-            printf("%llu -> ", tmp->tag);
+            printf("%lu -> ", tmp->tag);
             tmp = tmp->next;
         }
         puts("\nEND");
     }
 }
 
-void addToEnd(Set *cache, int setIndex, unsigned long long int tag) {
+void addToEnd(Set *cache, int setIndex, long int tag) {
 
     struct Block *node = (struct Block *) (malloc(sizeof(struct Block)));
 
@@ -72,7 +72,7 @@ void addToEnd(Set *cache, int setIndex, unsigned long long int tag) {
     cache[setIndex].content = cache[setIndex].content + 1;
 }
 
-void newNRU(Set *cache, unsigned long long int tagBVal, int setIndex) {
+void newNRU(Set *cache, long int tagBVal, int setIndex) {
 
     struct Block *tmp = cache[setIndex].head;
 
@@ -108,7 +108,7 @@ void newNRU(Set *cache, unsigned long long int tagBVal, int setIndex) {
     }
 }
 
-void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int wr) {
+void nru(Set *cache, long int tagBVal, int setIndex, int wr) {
 
     struct Block *tmp = cache[setIndex].head;
 
@@ -174,8 +174,6 @@ int main(int argc, char **argv) {
 
     int i;
 
-    sets = (int) (pow(2, cs) / ((pow(2, bs)) * assoc));
-
     blockSet = assoc;
 
     Set cache[sets];
@@ -189,30 +187,35 @@ int main(int argc, char **argv) {
         cache[i].content = 0;
     }
 
-    unsigned long long int val;
-    int bitNum = (int) (log(sets) / log(2));
+    long int val;
+
 
     while (!feof(tr)) {
 
         fscanf(tr, "%c%s\n", &car, adr);
 
-        val = strtoull(adr, NULL, 16);
+        val = strtol(adr, NULL, 16);
+
+        long int numBloc = val / bs;
+
+        int nbe = cs/(bs*assoc);
+
+        long int index = numBloc%nbe;
+
+        long int tag = numBloc/nbe;
 
         //printf("%c est caractère, %s est adresse\n", car, adr);
 
-        unsigned long long int tagBitsValue = (val >> (bs + bitNum));
-
-        int indexBinNum = (int) ((val >> bs) & ((int) (pow(2, bitNum) - 1)));
 
         if (car == 'R') {
 
             nbr_r++;
-            nru(cache, tagBitsValue, indexBinNum, 0);
+            nru(cache, tag, index, 0);
 
         } else if (car == 'W') {
 
             nbr_w++;
-            nru(cache, tagBitsValue, indexBinNum, 1);
+            nru(cache, tag, index, 1);
 
         }
     }
