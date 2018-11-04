@@ -163,6 +163,8 @@ int main(int argc, char **argv) {
 
     int i;
 
+    sets = (int) (pow(2, cs) / ((pow(2, bs)) * assoc));
+
     blockSet = assoc;
 
     Set cache[sets];
@@ -176,42 +178,30 @@ int main(int argc, char **argv) {
         cache[i].content = 0;
     }
 
-    int val, numBloc, nbe, index, tag;
-
+    unsigned long long int val;
+    int bitNum = (int) (log(sets) / log(2));
 
     while (!feof(tr)) {
 
         fscanf(tr, "%c%s\n", &car, adr);
 
-        val = (int)strtol(adr, NULL, 16);
-
-        numBloc = val/bs;
-
-        nbe = cs/(bs*assoc);
-
-        printf("Val\t\t\t%d.\n", val);
-        printf("BS\t\t\t%d.\n", bs);
-        printf("NumBloc\t\t%d.\n", numBloc);
-        printf("cs\t\t\t%d.\n", cs);
-        printf("assoc\t\t%d.\n", assoc);
-        printf("nbe\t\t\t%d.\n", nbe);
-
-        index = numBloc%nbe;
-
-        tag = numBloc/nbe;
+        val = strtoull(adr, NULL, 16);
 
         //printf("%c est caractère, %s est adresse\n", car, adr);
 
+        unsigned long long int tagBitsValue = (val >> (bs + bitNum));
+
+        int indexBinNum = (int) ((val >> bs) & ((int) (pow(2, bitNum) - 1)));
 
         if (car == 'R') {
 
             nbr_r++;
-            nru(cache, tag, index, 0);
+            nru(cache, tagBitsValue, indexBinNum, 0);
 
         } else if (car == 'W') {
 
             nbr_w++;
-            nru(cache, tag, index, 1);
+            nru(cache, tagBitsValue, indexBinNum, 1);
 
         }
     }
