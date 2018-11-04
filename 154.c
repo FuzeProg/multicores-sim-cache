@@ -10,7 +10,7 @@
 
 typedef struct Block {
     short nruB;
-    long int tag;
+    unsigned long long int tag;
     struct Block *next;
 } Block;
 
@@ -32,14 +32,14 @@ void printCache(Set *cache) {
     for (i = 0; i < sets; i++) {
         struct Block *tmp = cache[i].head;
         while (tmp != NULL) {
-            printf("%lu -> ", tmp->tag);
+            printf("%llu -> ", tmp->tag);
             tmp = tmp->next;
         }
         puts("\nEND");
     }
 }
 
-void addToEnd(Set *cache, int setIndex, long int tag) {
+void addToEnd(Set *cache, int setIndex, unsigned long long int tag) {
 
     struct Block *node = (struct Block *) (malloc(sizeof(struct Block)));
 
@@ -72,7 +72,7 @@ void addToEnd(Set *cache, int setIndex, long int tag) {
     cache[setIndex].content = cache[setIndex].content + 1;
 }
 
-void newNRU(Set *cache, long int tagBVal, int setIndex) {
+void newNRU(Set *cache, unsigned long long int tagBVal, int setIndex) {
 
     struct Block *tmp = cache[setIndex].head;
 
@@ -108,7 +108,7 @@ void newNRU(Set *cache, long int tagBVal, int setIndex) {
     }
 }
 
-void nru(Set *cache, long int tagBVal, int setIndex, int wr) {
+void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int wr) {
 
     struct Block *tmp = cache[setIndex].head;
 
@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
 
     cs = (int) strtol(argv[1], &tmp, 10);
     bs = (int) strtol(argv[2], &tmp, 10);
-    assoc = (int) strtol(argv[2], &tmp, 10);
+    assoc = (int) strtol(argv[3], &tmp, 10);
     trace = argv[4];
 
     FILE *tr = fopen(trace, "r");
@@ -159,17 +159,6 @@ int main(int argc, char **argv) {
     if ((!tr) || (argc != 5)) {
         perror("Erreur\n");
         exit(0);
-    }
-
-    double csCheck = log((double) cs) / log(2);
-    double bsCheck = log((double) bs) / log(2);
-
-    if ((csCheck != (int) csCheck) || (bsCheck != (int) bsCheck)) {
-        perror("Erreur\n");
-        exit(0);
-    } else {
-        cs = (int) csCheck;
-        bs = (int) bsCheck;
     }
 
     int i;
@@ -187,22 +176,29 @@ int main(int argc, char **argv) {
         cache[i].content = 0;
     }
 
-    long int val;
+    int val, numBloc, nbe, index, tag;
 
 
     while (!feof(tr)) {
 
         fscanf(tr, "%c%s\n", &car, adr);
 
-        val = strtol(adr, NULL, 16);
+        val = (int)strtol(adr, NULL, 16);
 
-        long int numBloc = val / bs;
+        numBloc = val/bs;
 
-        int nbe = cs/(bs*assoc);
+        nbe = cs/(bs*assoc);
 
-        long int index = numBloc%nbe;
+        printf("Val\t\t\t%d.\n", val);
+        printf("BS\t\t\t%d.\n", bs);
+        printf("NumBloc\t\t%d.\n", numBloc);
+        printf("cs\t\t\t%d.\n", cs);
+        printf("assoc\t\t%d.\n", assoc);
+        printf("nbe\t\t\t%d.\n", nbe);
 
-        long int tag = numBloc/nbe;
+        index = numBloc%nbe;
+
+        tag = numBloc/nbe;
 
         //printf("%c est caractère, %s est adresse\n", car, adr);
 
