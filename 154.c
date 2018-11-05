@@ -25,20 +25,7 @@ int nbr_r = 0, nbr_w = 0, hits_r = 0, hits_w = 0, misses_r = 0, misses_w = 0, hi
 
 char *trace = NULL;
 
-// Print out cache content
-void printCache(Set *cache) {
-    int i;
-    puts("START");
-    for (i = 0; i < sets; i++) {
-        struct Block *tmp = cache[i].head;
-        while (tmp != NULL) {
-            printf("%llu -> ", tmp->tag);
-            tmp = tmp->next;
-        }
-        puts("\nEND");
-    }
-}
-
+// Add a block to the sets
 void addToEnd(Set *cache, int setIndex, unsigned long long int tag) {
 
     struct Block *node = (struct Block *) (malloc(sizeof(struct Block)));
@@ -72,6 +59,7 @@ void addToEnd(Set *cache, int setIndex, unsigned long long int tag) {
     cache[setIndex].content = cache[setIndex].content + 1;
 }
 
+// Update the nru bite (R)
 void newNRU(Set *cache, unsigned long long int tagBVal, int setIndex) {
 
     struct Block *tmp = cache[setIndex].head;
@@ -108,6 +96,7 @@ void newNRU(Set *cache, unsigned long long int tagBVal, int setIndex) {
     }
 }
 
+// Create the block with the nru method
 void nru(Set *cache, unsigned long long int tagBVal, int setIndex, int wr) {
 
     struct Block *tmp = cache[setIndex].head;
@@ -149,6 +138,7 @@ int main(int argc, char **argv) {
 
     char *tmp;
 
+    // Take the args and convert into var
     cs = (int) strtol(argv[1], &tmp, 10);
     bs = (int) strtol(argv[2], &tmp, 10);
     assoc = (int) strtol(argv[2], &tmp, 10);
@@ -156,11 +146,13 @@ int main(int argc, char **argv) {
 
     FILE *tr = fopen(trace, "r");
 
+    // Check if there are 5 args and the file (the ./154.c is one of them)
     if ((!tr) || (argc != 5)) {
         perror("Erreur\n");
         exit(0);
     }
 
+    // Check if the cs and bs are OK
     double csCheck = log((double) cs) / log(2);
     double bsCheck = log((double) bs) / log(2);
 
@@ -179,8 +171,6 @@ int main(int argc, char **argv) {
     blockSet = assoc;
 
     Set cache[sets];
-
-    // printf("Cache : %d | Block : %d | Set : %d.\n", cs, bs, sets);
 
     char car, adr[10];
 
